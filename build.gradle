@@ -19,19 +19,44 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+    // Spring
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.5'
-    implementation 'mysql:mysql-connector-java:8.0.28'
-    implementation 'com.baomidou:mybatis-plus-core:3.5.14'
-    implementation 'com.baomidou:mybatis-plus-generator:3.5.14'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-freemarker'
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+    // MyBatis / MyBatis-Spring / MyBatis-Plus (compatible set for Spring Boot 3.5.7)
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.5'   // mybatis-spring boot starter (compatible with Spring 6 / Boot 3)
+    implementation 'com.baomidou:mybatis-plus-boot-starter:3.5.14'             // mybatis-plus spring-boot starter (3.5.x series)
+
+    // MyBatis core (starter normally brings it; optional)
+    // implementation 'org.mybatis:mybatis:3.5.19' // 可注释，starter 已含
+
+    // JDBC driver
+    implementation 'mysql:mysql-connector-java:8.0.28'
+
+    // Security / utils
+    implementation 'org.springframework.security:spring-security-crypto:6.4.4'
+
+    // JWT - jjwt
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
+    // Lombok - 推荐作为 compileOnly + annotationProcessor
+    compileOnly 'org.projectlombok:lombok:1.18.30'
+    annotationProcessor 'org.projectlombok:lombok:1.18.30'
+
+    // MyBatis-Plus generator: 如果你只在开发时使用生成器，建议把它移到一个单独的 tools 模块或只在 buildscript 使用
+    // 如果需要临时保留（不推荐放在运行时依赖）:
+    // implementation 'com.baomidou:mybatis-plus-generator:3.5.14'
+
+    // Test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.5'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
+// test 使用 JUnit Platform
 tasks.named('test') {
     useJUnitPlatform()
 }

@@ -1,6 +1,7 @@
 package xyz.shurlin.sprigserver.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Mapper;
 import xyz.shurlin.sprigserver.entity.WallData;
 
 /**
@@ -11,6 +12,7 @@ import xyz.shurlin.sprigserver.entity.WallData;
  * @author shurlin
  * @since 2025-11-03
  */
+@Mapper
 public interface WallDataMapper extends BaseMapper<WallData> {
 
 }

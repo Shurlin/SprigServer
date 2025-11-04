@@ -16,5 +16,9 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class WallDataServiceImpl extends ServiceImpl<WallDataMapper, WallData> implements IWallDataService {
+    private final WallDataMapper wallDataMapper;
 
+    public WallDataServiceImpl(WallDataMapper wallDataMapper) {
+        this.wallDataMapper = wallDataMapper;
+    }
 }
