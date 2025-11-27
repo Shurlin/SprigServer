@@ -1,11 +1,15 @@
 package xyz.shurlin.sprigserver.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.service.IService;
+import xyz.shurlin.sprigserver.dto.SpeedRankPostRequest;
 import xyz.shurlin.sprigserver.dto.WallCreateRequest;
 import xyz.shurlin.sprigserver.dto.WallCreateResponse;
 import xyz.shurlin.sprigserver.dto.WallFetchResponse;
+import xyz.shurlin.sprigserver.entity.SpeedRank;
 import xyz.shurlin.sprigserver.entity.WallData;
-import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,14 +17,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * </p>
  *
  * @author shurlin
- * @since 2025-11-03
+ * @since 2025-11-27
  */
-public interface IWallDataService extends IService<WallData> {
+public interface ISpeedRankService extends IService<SpeedRank> {
 
-    WallCreateResponse create(WallCreateRequest request);
+    List<SpeedRank> listRank();
 
-    IPage<WallData> list(int page, int size);
-
-    WallFetchResponse fetch(Long id);
-
+    void post(SpeedRankPostRequest request);
 }

@@ -29,16 +29,16 @@ public class UsersController {
 
     private static final Logger log = LoggerFactory.getLogger(UsersController.class);
     @Autowired
-    private IUsersService usersService;
+    private IUsersService service;
 
-    public UsersController(IUsersService usersService) {
-        this.usersService = usersService;
+    public UsersController(IUsersService service) {
+        this.service = service;
     }
 
     @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> login(@RequestBody LoginRequest req) {
         try {
-            LoginResponse resp = usersService.login(req);
+            LoginResponse resp = service.login(req);
             return ResponseEntity.ok(resp);
         } catch (RuntimeException ex) {
             log.debug(ex.getMessage());
@@ -49,7 +49,7 @@ public class UsersController {
     @PostMapping(value = "/register", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> register(@RequestBody RegisterRequest req) {
         try {
-            RegisterResponse resp = usersService.register(req);
+            RegisterResponse resp = service.register(req);
             return ResponseEntity.ok(resp);
         } catch (RuntimeException ex) {
             log.debug(ex.getMessage());

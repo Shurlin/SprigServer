@@ -38,3 +38,4 @@ out/
 
 ### password ###
 src/main/resources/application.properties
+src/main/java/xyz/shurlin/sprigserver/utils/BCryptEncoder.java

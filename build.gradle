@@ -27,6 +27,8 @@ dependencies {
     // MyBatis / MyBatis-Spring / MyBatis-Plus (compatible set for Spring Boot 3.5.7)
     implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.5'   // mybatis-spring boot starter (compatible with Spring 6 / Boot 3)
     implementation 'com.baomidou:mybatis-plus-boot-starter:3.5.14'             // mybatis-plus spring-boot starter (3.5.x series)
+    implementation 'com.baomidou:mybatis-plus-jsqlparser:3.5.14'
+
 
     // MyBatis core (starter normally brings it; optional)
     // implementation 'org.mybatis:mybatis:3.5.19' // 可注释，starter 已含
@@ -49,6 +51,8 @@ dependencies {
     // MyBatis-Plus generator: 如果你只在开发时使用生成器，建议把它移到一个单独的 tools 模块或只在 buildscript 使用
     // 如果需要临时保留（不推荐放在运行时依赖）:
     // implementation 'com.baomidou:mybatis-plus-generator:3.5.14'
+
+    implementation 'com.fasterxml.jackson.module:jackson-module-parameter-names'
 
     // Test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
