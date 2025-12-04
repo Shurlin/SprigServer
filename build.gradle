@@ -22,7 +22,9 @@ dependencies {
     // Spring
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.springframework.boot:spring-boot-starter-freemarker'
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
 
     // MyBatis / MyBatis-Spring / MyBatis-Plus (compatible set for Spring Boot 3.5.7)
     implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.5'   // mybatis-spring boot starter (compatible with Spring 6 / Boot 3)
@@ -53,6 +55,7 @@ dependencies {
     // implementation 'com.baomidou:mybatis-plus-generator:3.5.14'
 
     implementation 'com.fasterxml.jackson.module:jackson-module-parameter-names'
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
 
     // Test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'

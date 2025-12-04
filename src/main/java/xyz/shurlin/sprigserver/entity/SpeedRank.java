@@ -1,5 +1,8 @@
 package xyz.shurlin.sprigserver.entity;
 
+import com.baomidou.mybatisplus.annotation.TableName;
+
+@TableName("speed_rank")
 public class SpeedRank {
     private Long id;
     private String username;

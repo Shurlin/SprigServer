@@ -16,7 +16,7 @@ import xyz.shurlin.sprigserver.entity.Users;
 @Mapper
 public interface UsersMapper extends BaseMapper<Users> {
 
-    @Select("SELECT id FROM users ORDER BY createdAt DESC LIMIT 1")
+    @Select("SELECT id FROM users ORDER BY id DESC LIMIT 1")
     Long selectLatestId();
 
 }

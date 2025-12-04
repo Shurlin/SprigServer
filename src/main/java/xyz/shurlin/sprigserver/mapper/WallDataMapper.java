@@ -16,6 +16,6 @@ import xyz.shurlin.sprigserver.entity.WallData;
 @Mapper
 public interface WallDataMapper extends BaseMapper<WallData> {
 
-    @Select("SELECT id FROM wall_data ORDER BY createdAt DESC LIMIT 1")
+    @Select("SELECT id FROM wall_data ORDER BY id DESC LIMIT 1")
     Long selectLatestId();
 }

@@ -18,6 +18,7 @@ import java.util.List;
 @Service
 public class SpeedRankServiceImpl extends ServiceImpl<SpeedRankMapper, SpeedRank> implements ISpeedRankService {
 
+    @Autowired
     private final SpeedRankMapper mapper;
 
     public SpeedRankServiceImpl(SpeedRankMapper mapper) {
@@ -36,12 +37,15 @@ public class SpeedRankServiceImpl extends ServiceImpl<SpeedRankMapper, SpeedRank
     @Override
     public void post(SpeedRankPostRequest request) {
         String username = request.getUsername();
+//        Logger logger = LoggerFactory.getLogger(SpeedRankServiceImpl.class);
         SpeedRank speedRank = mapper.selectOne(new QueryWrapper<SpeedRank>().eq("username", username));
-        if (speedRank!=null && speedRank.getScore() < request.getScore()) {
-            mapper.update(new UpdateWrapper<SpeedRank>().eq("username", username).set("score", request.getScore()));
+        if (speedRank!=null) {
+            if (speedRank.getScore() < request.getScore())
+                mapper.update(new UpdateWrapper<SpeedRank>().eq("username", username).set("score", request.getScore()));
         }else{
+//            logger.info("no exist");
             Long id = mapper.selectLatestId()+1;
-            mapper.insert(new SpeedRank(id, request.getUsername(), request.getScore()));
+            mapper.insertOrUpdate(new SpeedRank(id, request.getUsername(), request.getScore()));
         }
     }
 }

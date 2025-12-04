@@ -1,6 +1,9 @@
 package xyz.shurlin.sprigserver.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import jakarta.servlet.http.HttpServletRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -12,6 +15,8 @@ import xyz.shurlin.sprigserver.dto.WallFetchResponse;
 import xyz.shurlin.sprigserver.entity.WallData;
 import xyz.shurlin.sprigserver.service.IWallDataService;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,12 +38,18 @@ public class WallDataController {
     private IWallDataService service;
 
     @PostMapping("/create")
-    public ResponseEntity<?> create(@RequestBody WallCreateRequest request) {
+    public ResponseEntity<?> create(@RequestBody WallCreateRequest request, HttpServletRequest hRequest) {
         try {
             if (request.getContent() == null || request.getContent().trim().isEmpty()) {
                 return ResponseEntity.badRequest().build();
             }
             WallCreateResponse response = service.create(request);
+
+            Logger logger = LoggerFactory.getLogger(WallDataController.class);
+            String clientIp = HealthController.getClientIpAddr(hRequest);
+            Date date = new Date();
+            logger.info("{} post wall at {}", clientIp, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date));
+
             return ResponseEntity.noContent().build();
         } catch (Exception e) {
             return ResponseEntity.status(401).body(java.util.Map.of("error", e.getMessage()));
