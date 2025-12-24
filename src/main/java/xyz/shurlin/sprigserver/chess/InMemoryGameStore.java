@@ -17,22 +17,29 @@ public class InMemoryGameStore {
     public static class GameState {
         public final String[][] board = new String[9][10];
         public final AtomicInteger lastIndex = new AtomicInteger(-1);
+        public String userRed;
+        public String userBlack = null;
         public boolean isRed = true;
+        public boolean playing = true;
+
+        public GameState(String userRed) {
+            this.userRed = userRed;
+        }
     }
 
     public InMemoryGameStore() {
-        logger.info("InMemoryGameStore::<ctor> this={} classloader={} thread={}",
-                System.identityHashCode(this),
-                System.identityHashCode(this.getClass().getClassLoader()),
-                Thread.currentThread().getName());
+//        logger.info("InMemoryGameStore::<ctor> this={} classloader={} thread={}",
+//                System.identityHashCode(this),
+//                System.identityHashCode(this.getClass().getClassLoader()),
+//                Thread.currentThread().getName());
         // 打印创建栈，便于定位哪个位置 new 了它
-        Exception e = new Exception("stack-trace-for-store-ctor");
-        logger.info("store ctor stack: ", e);
+//        Exception e = new Exception("stack-trace-for-store-ctor");
+//        logger.info("store ctor stack: ", e);
     }
 
     private final ConcurrentHashMap<Long, GameState> games = new ConcurrentHashMap<>();
 
-    public GameState getOrCreateGame(long gameId) {
+    public GameState getOrCreateGame(long gameId, String username) {
 //        synchronized (this) {
 //            logger.info("InMemoryGameStore instance: {}", System.identityHashCode(this));
 //            StringBuilder sb = new StringBuilder();
@@ -50,13 +57,25 @@ public class InMemoryGameStore {
 //                return s;
 //            }
 //        }
-        logger.info("InMemoryGameStore instance: {}", System.identityHashCode(this));
-        return games.computeIfAbsent(gameId, id -> {
-            GameState s = new GameState();
+//        logger.info("InMemoryGameStore instance: {}", System.identityHashCode(this));
+        // 分配第一个玩家
+        GameState state = games.computeIfAbsent(gameId, id -> {
+            GameState s = new GameState(username);
             initStandardBoard(s.board);
-            logger.info("Created new game with gameId: {}", gameId);
             return s;
         });
+        // 分配第二个玩家
+        if (state.userBlack == null && !state.userRed.equals(username)) {
+            state.userBlack = username;
+        }
+        //如果是第三个玩家或者前两个玩家就直接返回，不用分配，第三位开始进观战位
+        return state;
+//        return games.computeIfAbsent(gameId, id -> {
+//            GameState s = new GameState();
+//            initStandardBoard(s.board);
+////            logger.info("Created new game with gameId: {}", gameId);
+//            return s;
+//        });
     }
 
     public GameState getGame(long gameId) {
@@ -64,13 +83,19 @@ public class InMemoryGameStore {
     }
 
     public synchronized int applyMove(long gameId, MoveRequest move) {
-        GameState s = getOrCreateGame(gameId);
+        GameState s = getGame(gameId);
         Position to = move.to;
         Position from = move.from;
+        //判断输赢
+        int win = 0;
+        if (s.board[to.x][to.y] != null && s.board[to.x][to.y].startsWith("JIANG")) {
+            win = s.board[to.x][to.y].endsWith("B") ? 1 : 2;
+//            logger.info("Game {} ended. Winner: {}", gameId, s.isRed ? s.userRed : s.userBlack);
+        }
         s.board[to.x][to.y] = s.board[from.x][from.y];
         s.board[from.x][from.y] = null;
         s.isRed = !s.isRed;
-        return s.lastIndex.incrementAndGet();
+        return win == 0 ? s.lastIndex.incrementAndGet() : -win;
     }
 
     public static String[][] copyBoard(GameState s) {
@@ -84,6 +109,13 @@ public class InMemoryGameStore {
     public int getLastIndex(long gameId) {
         GameState s = games.get(gameId);
         return s == null ? -1 : s.lastIndex.get();
+    }
+
+    void resetGame(GameState s) {
+        initStandardBoard(s.board);
+        s.lastIndex.set(-1);
+        s.isRed = true;
+        s.playing = true;
     }
 
     private void initStandardBoard(String[][] b) {
@@ -126,5 +158,9 @@ public class InMemoryGameStore {
 
     public List<Long> listRooms() {
         return new ArrayList<>(games.keySet());
+    }
+
+    public void removeGame(long gameId) {
+        games.remove(gameId);
     }
 }
