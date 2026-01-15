@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'xyz.shurlin'
-version = '1.0.0'
+version = '1.5.0'
 description = 'SprigServer'
 
 java {
@@ -33,6 +33,9 @@ dependencies {
 
     //GSON
     implementation 'com.google.code.gson:gson:2.11.0'
+
+    implementation 'com.squareup.okhttp3:okhttp:4.11.0'
+
 
 
     // MyBatis core (starter normally brings it; optional)
